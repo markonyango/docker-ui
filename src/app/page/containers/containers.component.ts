@@ -53,7 +53,7 @@ export class ContainersComponent {
             },
             {
               component: PlayButtonRendererComponent,
-              action: (params: any) => console.log(params.data.id),
+              action: (params: any) => this.dockerService.start_container(params.data.id),
             },
             {
               component: StopButtonRendererComponent,
