@@ -23,6 +23,7 @@ export class ContainersComponent {
   protected containers = inject(DockerService)?.containers;
   protected gridOptions: Signal<GridOptions> = computed(() => ({
     rowData: this.containers(),
+    getRowId: params => params.data.id,
     columnDefs: [
       {
         field: 'names',
