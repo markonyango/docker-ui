@@ -61,7 +61,7 @@ export class ContainersComponent {
             },
             {
               component: DeleteButtonComponent,
-              action: (params: any) => console.log(params),
+              action: (params: any) => this.dockerService.remove_container(params.data.id),
             },
           ],
         },

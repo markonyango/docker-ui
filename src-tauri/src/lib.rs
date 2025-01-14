@@ -80,6 +80,16 @@ async fn start_container(id: String, state: State<'_, Mutex<Docker>>) -> Result<
         .map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+async fn remove_container(id: String, state: State<'_, Mutex<Docker>>) -> Result<(), String> {
+    let docker = state.lock().await;
+
+    docker
+        .remove_container(&id, None)
+        .await
+        .map_err(|e| e.to_string())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     env_logger::init();
@@ -95,7 +105,8 @@ pub fn run() {
             get_images,
             get_container_details,
             start_container,
-            stop_container
+            stop_container,
+            remove_container
         ])
         .manage(Mutex::new(docker))
         .run(tauri::generate_context!())

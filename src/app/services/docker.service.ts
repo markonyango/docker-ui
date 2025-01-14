@@ -69,4 +69,8 @@ export class DockerService {
   public start_container(id: string) {
     return from(invoke('start_container', { id }));
   }
+
+  public remove_container(id: string) {
+    return from(invoke('remove_container', { id }));
+  }
 }
