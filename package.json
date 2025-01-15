@@ -22,6 +22,7 @@
     "@angular/router": "^17.0.0",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
+    "ag-charts-angular": "^11.0.4",
     "ag-grid-angular": "^33.0.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
