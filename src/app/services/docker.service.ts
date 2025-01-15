@@ -58,8 +58,8 @@ export class DockerService {
   public readonly containers = computed<Container[]>(() => this.docker()?.containers);
   public readonly images = computed(() => this.docker()?.images);
 
-  public get_container_details(id: string) {
-    return from(invoke('get_container_details', { id }));
+  public inspect_container(id: string) {
+    return from(invoke('inspect_container', { id }));
   }
 
   public stop_container(id: string) {

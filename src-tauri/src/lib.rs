@@ -1,11 +1,12 @@
 use bollard::container::ListContainersOptions;
 use bollard::image::ListImagesOptions;
-use bollard::secret::{ContainerInspectResponse, ImageSummary};
+use bollard::secret::ImageSummary;
 use bollard::Docker;
 use tauri::async_runtime::Mutex;
 use tauri::State;
 use types::ContainerInformation;
 
+mod container;
 mod types;
 
 #[tauri::command]
@@ -45,51 +46,6 @@ async fn get_images(state: State<'_, Mutex<Docker>>) -> Result<Vec<ImageSummary>
         .map_err(|e| e.to_string())
 }
 
-#[tauri::command]
-async fn get_container_details(
-    id: String,
-    state: State<'_, Mutex<Docker>>,
-) -> Result<ContainerInspectResponse, String> {
-    let docker = state.lock().await;
-
-    let container_details = docker
-        .inspect_container(&id, None)
-        .await
-        .map_err(|e| e.to_string())?;
-
-    Ok(container_details)
-}
-
-#[tauri::command]
-async fn stop_container(id: String, state: State<'_, Mutex<Docker>>) -> Result<(), String> {
-    let docker = state.lock().await;
-
-    docker
-        .stop_container(&id, None)
-        .await
-        .map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-async fn start_container(id: String, state: State<'_, Mutex<Docker>>) -> Result<(), String> {
-    let docker = state.lock().await;
-
-    docker
-        .start_container::<String>(&id, None)
-        .await
-        .map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-async fn remove_container(id: String, state: State<'_, Mutex<Docker>>) -> Result<(), String> {
-    let docker = state.lock().await;
-
-    docker
-        .remove_container(&id, None)
-        .await
-        .map_err(|e| e.to_string())
-}
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     env_logger::init();
@@ -103,10 +59,10 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             get_containers,
             get_images,
-            get_container_details,
-            start_container,
-            stop_container,
-            remove_container
+            container::commands::inspect_container,
+            container::commands::start_container,
+            container::commands::stop_container,
+            container::commands::remove_container
         ])
         .manage(Mutex::new(docker))
         .run(tauri::generate_context!())
