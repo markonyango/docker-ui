@@ -1,5 +1,5 @@
 import { Injectable, computed } from '@angular/core';
-import { forkJoin, from, interval, switchMap, tap } from 'rxjs';
+import { forkJoin, from, interval, switchMap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { invoke } from '@tauri-apps/api/core';
@@ -57,20 +57,4 @@ export class DockerService {
 
   public readonly containers = computed<Container[]>(() => this.docker()?.containers);
   public readonly images = computed(() => this.docker()?.images);
-
-  public inspect_container(id: string) {
-    return from(invoke('inspect_container', { id }));
-  }
-
-  public stop_container(id: string) {
-    return from(invoke('stop_container', { id }));
-  }
-
-  public start_container(id: string) {
-    return from(invoke('start_container', { id }));
-  }
-
-  public remove_container(id: string) {
-    return from(invoke('remove_container', { id }));
-  }
 }

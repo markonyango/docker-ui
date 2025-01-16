@@ -1,5 +1,5 @@
 import { Component, Signal, computed, inject } from '@angular/core';
-import { DockerService, Port } from '../../services/docker.service';
+import { Port } from '../../services/docker.service';
 
 import { GridOptions } from 'ag-grid-community';
 import { ActionsCellRendererComponent } from '../../components/cell-renderer/actions.component';
@@ -9,6 +9,7 @@ import { PlayButtonRendererComponent } from '../../components/cell-renderer/play
 import { StopButtonRendererComponent } from '../../components/cell-renderer/stop-button.component';
 import { DeleteButtonComponent } from '../../components/cell-renderer/delete-button.component';
 import { Router } from '@angular/router';
+import { ContainerService } from '../../services/container.service';
 
 @Component({
   selector: 'app-containers',
@@ -19,8 +20,8 @@ import { Router } from '@angular/router';
 })
 export class ContainersComponent {
   private router = inject(Router);
-  private dockerService = inject(DockerService);
-  protected containers = inject(DockerService)?.containers;
+  private containerService = inject(ContainerService);
+  protected containers = inject(ContainerService)?.container_list;
   protected gridOptions: Signal<GridOptions> = computed(() => ({
     rowData: this.containers(),
     getRowId: params => params.data.id,
@@ -54,15 +55,15 @@ export class ContainersComponent {
             },
             {
               component: PlayButtonRendererComponent,
-              action: (params: any) => this.dockerService.start_container(params.data.id),
+              action: (params: any) => this.containerService.start_container(params.data.id),
             },
             {
               component: StopButtonRendererComponent,
-              action: (params: any) => this.dockerService.stop_container(params.data.id),
+              action: (params: any) => this.containerService.stop_container(params.data.id),
             },
             {
               component: DeleteButtonComponent,
-              action: (params: any) => this.dockerService.remove_container(params.data.id),
+              action: (params: any) => this.containerService.remove_container(params.data.id),
             },
           ],
         },
