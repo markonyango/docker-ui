@@ -5,6 +5,7 @@ use tauri::State;
 mod container;
 mod image;
 mod types;
+mod volume;
 
 pub type AppState = State<'static, Mutex<Docker>>;
 
@@ -28,6 +29,8 @@ pub fn run() {
             container::commands::remove_container,
             container::commands::get_container_stats_once,
             container::commands::get_container_logs_once,
+            volume::commands::get_volumes,
+            volume::commands::inspect_volume,
         ])
         .manage(Mutex::new(docker))
         .run(tauri::generate_context!())
