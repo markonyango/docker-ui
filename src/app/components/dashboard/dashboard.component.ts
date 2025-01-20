@@ -28,10 +28,9 @@ export class DashboardComponent {
     map(({ matches }) => {
       if (matches) {
         return [
-          { title: 'Card 1', cols: 1, rows: 1, component: ImagesComponent },
-          { title: 'Card 2', cols: 1, rows: 1, component: ImagesComponent },
-          { title: 'Card 3', cols: 1, rows: 1, component: ImagesComponent },
-          { title: 'Card 4', cols: 1, rows: 1, component: ImagesComponent },
+          { title: 'Containers', cols: 1, rows: 1, component: ContainersComponent },
+          { title: 'Images', cols: 1, rows: 1, component: ImagesComponent },
+          { title: 'Volumes', cols: 1, rows: 1, component: VolumesComponent },
         ];
       }
 
