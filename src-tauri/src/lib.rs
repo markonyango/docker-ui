@@ -4,6 +4,7 @@ use tauri::State;
 
 mod container;
 mod image;
+mod system;
 mod types;
 mod volume;
 
@@ -31,6 +32,7 @@ pub fn run() {
             container::commands::get_container_logs_once,
             volume::commands::get_volumes,
             volume::commands::inspect_volume,
+            system::commands::get_system_data_usage,
         ])
         .manage(Mutex::new(docker))
         .run(tauri::generate_context!())

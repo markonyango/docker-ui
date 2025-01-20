@@ -1,4 +1,5 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
+import { SystemService } from '../../../services/system.service';
 
 @Component({
   selector: 'app-images',
@@ -6,7 +7,7 @@ import { Component, input } from '@angular/core';
   imports: [],
   template: `
     <div class="container">
-      {{ images() ?? 44 }}
+      {{ count() }}
     </div>
   `,
   styles: `
@@ -22,5 +23,6 @@ import { Component, input } from '@angular/core';
   `,
 })
 export class ImagesComponent {
-  public readonly images = input();
+  private readonly images = inject(SystemService).images;
+  protected readonly count = computed(() => this.images().length);
 }

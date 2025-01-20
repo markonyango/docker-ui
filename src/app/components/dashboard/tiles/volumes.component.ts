@@ -1,4 +1,5 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
+import { SystemService } from '../../../services/system.service';
 
 @Component({
   selector: 'app-volumes',
@@ -6,7 +7,7 @@ import { Component, input } from '@angular/core';
   imports: [],
   template: `
     <div class="container">
-      {{ volumes() ?? 21 }}
+      {{ count() }}
     </div>
   `,
   styles: `
@@ -22,5 +23,6 @@ import { Component, input } from '@angular/core';
   `,
 })
 export class VolumesComponent {
-  public readonly volumes = input();
+  private readonly volumes = inject(SystemService).volumes;
+  protected readonly count = computed(() => this.volumes().length);
 }

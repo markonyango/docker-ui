@@ -1,5 +1,6 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { SystemService } from '../../../services/system.service';
 
 @Component({
   selector: 'app-containers',
@@ -9,15 +10,15 @@ import { MatIconModule } from '@angular/material/icon';
     <div class="container">
       <div>
         <mat-icon inline="true">play_arrow</mat-icon>
-        <span>{{ running() ?? 9 }}</span>
+        <span>{{ running() }}</span>
       </div>
       <div>
         <mat-icon inline="true">stop</mat-icon>
-        <span>{{ stopped() ?? 15 }}</span>
+        <span>{{ exited() }}</span>
       </div>
       <div>
         <mat-icon inline="true">pause</mat-icon>
-        <span>{{ paused() ?? 0 }}</span>
+        <span>{{ paused() }}</span>
       </div>
     </div>
   `,
@@ -44,7 +45,8 @@ import { MatIconModule } from '@angular/material/icon';
   ],
 })
 export class ContainersComponent {
-  public readonly running = input();
-  public readonly stopped = input();
-  public readonly paused = input();
+  protected readonly containers = inject(SystemService).containers;
+  protected readonly running = computed(() => this.containers().filter((container: any) => container.State == 'running').length);
+  protected readonly exited = computed(() => this.containers().filter((container: any) => container.State == 'exited').length);
+  protected readonly paused = computed(() => this.containers().filter((container: any) => container.State == 'paused').length);
 }

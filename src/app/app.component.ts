@@ -7,7 +7,6 @@ import { NavigationComponent } from './components/navigation/navigation.componen
   standalone: true,
   imports: [RouterOutlet, NavigationComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
-export class AppComponent {
-}
+export class AppComponent {}
