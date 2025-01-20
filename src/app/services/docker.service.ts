@@ -22,39 +22,20 @@ export type Port = {
   typ: string;
 };
 
-export type Image = {
-  Containers: number;
-  Created: number;
-  Id: string;
-  Labels: Record<string, string>;
-  ParentId: string;
-  RepoDigests: string[];
-  RepoTags: string[];
-  SharedSize: number;
-  Size: number;
-};
-
 @Injectable({ providedIn: 'root' })
 export class DockerService {
   private readonly docker = toSignal(
     interval(1000).pipe(
       switchMap(() =>
         forkJoin({
-          containers: from(invoke<any>('get_containers')),
-          images: from(invoke<Image[]>('get_images')),
           volumes: from(invoke<any[]>('get_images')),
         })
       )
     ),
     {
       initialValue: {
-        containers: [],
-        images: [],
         volumes: [],
       },
     }
   );
-
-  public readonly containers = computed<Container[]>(() => this.docker()?.containers);
-  public readonly images = computed(() => this.docker()?.images);
 }

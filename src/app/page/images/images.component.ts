@@ -1,7 +1,12 @@
 import { Component, Signal, computed, inject } from '@angular/core';
-import { DockerService, Image } from '../../services/docker.service';
+import { DockerService } from '../../services/docker.service';
 import { GridOptions } from 'ag-grid-community';
 import { TableComponent } from '../../components/table/table.component';
+import { ImageService } from '../../services/image.service';
+import { ActionsCellRendererComponent } from '../../components/cell-renderer/actions.component';
+import { ViewButtonRendererComponent } from '../../components/cell-renderer/view-button.component';
+import { DeleteButtonComponent } from '../../components/cell-renderer/delete-button.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-images',
@@ -11,10 +16,13 @@ import { TableComponent } from '../../components/table/table.component';
   styleUrl: './images.component.css',
 })
 export class ImagesComponent {
-  protected images = inject(DockerService)?.images;
+  protected images = inject(ImageService)?.images;
   protected number_of_images = computed(() => this.images().length);
 
-  protected gridOptions: Signal<GridOptions<Image>> = computed(() => ({
+  private router = inject(Router);
+  private image_service = inject(ImageService);
+
+  protected gridOptions: Signal<GridOptions> = computed(() => ({
     rowData: this.images(),
     getRowId: (params: any) => params.data.Id,
     columnDefs: [
@@ -23,6 +31,23 @@ export class ImagesComponent {
       { field: 'Created', valueGetter: (params: any) => new Date((params.data?.Created ?? 0) * 1000).toLocaleString(), sortable: true },
       { field: 'Size', valueGetter: (params: any) => `${((params.data?.Size ?? 0) / 1024 / 1024 / 1024).toFixed(2)} GB`, sortable: true },
       { field: 'Id', valueGetter: (params: any) => params.data?.Id.split(':').at(1)?.slice(0, 12), sortable: true },
+      {
+        headerName: 'Actions',
+        pinned: 'right',
+        cellRenderer: ActionsCellRendererComponent,
+        cellRendererParams: {
+          components: [
+            {
+              component: ViewButtonRendererComponent,
+              action: (params: any) => this.router.navigate(['images', params.data.Id]),
+            },
+            {
+              component: DeleteButtonComponent,
+              action: (params: any) => this.image_service.remove_image(params.data.id),
+            },
+          ],
+        },
+      },
     ],
   }));
 }
