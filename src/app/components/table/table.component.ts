@@ -1,4 +1,4 @@
-import { Component, computed, effect, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
   GridOptions,
