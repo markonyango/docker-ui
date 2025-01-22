@@ -25,9 +25,9 @@ export class TableComponent {
     },
     suppressCellFocus: true,
     animateRows: false,
-    rowSelection: 'single',
+    rowSelection: { mode: 'singleRow', checkboxes: false },
     pagination: false,
-    domLayout: 'autoHeight',
+    domLayout: 'normal',
     onGridReady: event => {
       event.api.sizeColumnsToFit();
     },

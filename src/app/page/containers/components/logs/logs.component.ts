@@ -1,6 +1,7 @@
-import { Component, computed, inject, input } from '@angular/core';
-import { ContainerService } from '../../../../services/container.service';
 import { AsyncPipe, JsonPipe } from '@angular/common';
+import { Component, computed, inject, input } from '@angular/core';
+import { GridOptions } from 'ag-grid-community';
+import { ContainerService } from '../../../../services/container.service';
 import { TableComponent } from '../../../../components/table/table.component';
 
 @Component({
@@ -15,14 +16,16 @@ export class LogsComponent {
   private container_service = inject(ContainerService);
 
   protected logs = computed(() => {
-    return this.container_service.container()[this.id()]?.logs.map(trim_timestamp_from_message);
+    return this.container_service.container()[this.id()]?.logs?.map(trim_timestamp_from_message);
   });
 
-  protected truncated_logs = computed(() => this.logs().slice(-1000));
-
-  protected gridOptions = computed(() => ({
-    rowData: this.logs().length < 1000 ? this.logs() : this.truncated_logs(),
-    columnDefs: [{ field: 'timestamp' }, { field: 'source' }, { field: 'message' }],
+  protected gridOptions = computed<GridOptions<{ timestamp: string; message: string; source: string }>>(() => ({
+    rowData: this.logs(),
+    columnDefs: [
+      { field: 'timestamp', flex: 1 },
+      { field: 'source', flex: 1 },
+      { field: 'message', flex: 4 },
+    ],
   }));
 
   ngOnInit() {
