@@ -15,3 +15,9 @@
   top: 0;
   z-index: 1;
 }
+
+.route-container {
+  width: 100%;
+  /*height: max(calc(100vh - 132px), 830px);*/
+  height: calc(100vh - 132px);
+}
